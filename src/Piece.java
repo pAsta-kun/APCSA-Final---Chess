@@ -36,6 +36,8 @@ public class Piece extends JButton implements ActionListener {
                 icon = new ImageIcon("src/pieces/wp.png");
             else if (type.equals("br"))
                 icon = new ImageIcon("src/pieces/wr.png");
+            else if (type.equals("bn"))
+                icon = new ImageIcon("src/pieces/wn.png");
         }
 
         else
@@ -96,12 +98,12 @@ public class Piece extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof JButton) {
-            JButton clickedButton = (JButton) e.getSource();
+
             // Calculates legal moves based on current position
-            // System.out.println(x);
-            legalMoves.clear();
             calculateLegalMoves(x / 125, y / 125);
-            // pieceMove(3,4);
         }
     }
+
 }
+
+

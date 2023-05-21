@@ -8,7 +8,7 @@ import java.awt.event.MouseListener;
 public class Chess extends JFrame implements ActionListener, MouseListener
 {
     //Instance variables
-    Container window;
+    private Container window;
     private JPanel a1 = new JPanel();
     private JPanel a2 = new JPanel();
     private JPanel a3 = new JPanel();
@@ -74,7 +74,7 @@ public class Chess extends JFrame implements ActionListener, MouseListener
     private JPanel h7 = new JPanel();
     private JPanel h8 = new JPanel();
 
-    JPanel board[][] = {
+    private JPanel board[][] = {
 
             {a8, b8, c8, d8, e8, f8, g8, h8 },
             {a7, b7, c7, d7, e7, f7, g7, h7},
@@ -88,27 +88,36 @@ public class Chess extends JFrame implements ActionListener, MouseListener
     private int x;
     private int y;
 
-    Pawn PA2 = new Pawn();
-    Pawn PB2 = new Pawn();
-    Pawn PC2 = new Pawn();
-    Pawn PD2 = new Pawn();
-    Pawn PE2 = new Pawn();
-    Pawn PF2 = new Pawn();
-    Pawn PG2 = new Pawn();
-    Pawn PH2 = new Pawn();
-    Pawn PA7 = new Pawn();
-    Pawn PB7 = new Pawn();
-    Pawn PC7 = new Pawn();
-    Pawn PD7 = new Pawn();
-    Pawn PE7 = new Pawn();
-    Pawn PF7 = new Pawn();
-    Pawn PG7 = new Pawn();
-    Pawn PH7 = new Pawn();
-    Pawn[] wPawns = {PA2, PB2, PC2, PD2, PE2, PF2, PG2, PH2};
-    Pawn[] bPawns = {PA7, PB7, PC7, PD7, PE7, PF7, PG7, PH7};
+    private Pawn PA2 = new Pawn();
+    private Pawn PB2 = new Pawn();
+    private Pawn PC2 = new Pawn();
+    private Pawn PD2 = new Pawn();
+    private Pawn PE2 = new Pawn();
+    private Pawn PF2 = new Pawn();
+    private Pawn PG2 = new Pawn();
+    private Pawn PH2 = new Pawn();
+    private Pawn PA7 = new Pawn();
+    private Pawn PB7 = new Pawn();
+    private Pawn PC7 = new Pawn();
+    private Pawn PD7 = new Pawn();
+    private Pawn PE7 = new Pawn();
+    private Pawn PF7 = new Pawn();
+    private Pawn PG7 = new Pawn();
+    private Pawn PH7 = new Pawn();
+    private Pawn[] wPawns = {PA2, PB2, PC2, PD2, PE2, PF2, PG2, PH2};
+    private Pawn[] bPawns = {PA7, PB7, PC7, PD7, PE7, PF7, PG7, PH7};
 
     private Piece selectedPiece;
-    private Rook test;
+    private Rook RA1 = new Rook();
+    private Rook RA8 = new Rook();
+    private Rook RH1 = new Rook();
+    private Rook RH8 = new Rook();
+
+    private  Knight NB8 = new Knight();
+    private  Knight NG8 = new Knight();
+    private  Knight NB1 = new Knight();
+    private  Knight NG1 = new Knight();
+
 
     public Chess()
     {
@@ -122,7 +131,7 @@ public class Chess extends JFrame implements ActionListener, MouseListener
         window = getContentPane();
         window.setLayout(null);
         setSize(1015, 1037);
-        setTitle("rip.Chess");
+        setTitle("Chess");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -138,8 +147,8 @@ public class Chess extends JFrame implements ActionListener, MouseListener
             {
                 //sets up board colors
                 if(numbers%2 == 0 && letters%2 == 0 || numbers%2 != 0 && letters%2 != 0)
-                    board[letters][numbers].setBackground(Color.decode("#B58863"));
-                else board[letters][numbers].setBackground(Color.decode("#F0D9B5"));
+                    board[letters][numbers].setBackground(Color.decode("#F0D9B5"));
+                else board[letters][numbers].setBackground(Color.decode("#B58863"));
 
                 //sets up the jpanels size + location
                 board[letters][numbers].setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
@@ -157,6 +166,7 @@ public class Chess extends JFrame implements ActionListener, MouseListener
 
     public void setUpPieces()
     {
+        //setting up pawns
         x = 0;
         y = 125;
 
@@ -168,7 +178,7 @@ public class Chess extends JFrame implements ActionListener, MouseListener
             bPawns[row] = new Pawn(x, y, "black", board, window);
             board[y/125][row].add(bPawns[row].getPiece());
 
-            if (row % 2 == 0) {
+            if (row % 2 != 0) {
                 bPawns[row].setBackgroundColor("#F0D9B5");
             }
 
@@ -183,7 +193,7 @@ public class Chess extends JFrame implements ActionListener, MouseListener
             wPawns[row] = new Pawn(x - 875, y, "white", board, window);
             board[y/125][row].add(wPawns[row].getPiece());
 
-            if (row % 2 != 0) {
+            if (row % 2 == 0) {
                 wPawns[row].setBackgroundColor("#F0D9B5");
             }
             x += 125;
@@ -193,20 +203,79 @@ public class Chess extends JFrame implements ActionListener, MouseListener
                 selectedPiece = wPawns[finalRow];
             });
         }
-        test = new Rook(0, 0, "white", board, window);
-        board[0][0].add(test.getPiece());
 
-        test.getPiece().addActionListener(e -> {
-            selectedPiece = test;
+        //setting up rooks
+        RA8 = new Rook(0, 0, "black", board, window);
+        board[0][0].add(RA8.getPiece());
+        RA8.setBackgroundColor("#F0D9B5");
+        RA8.getPiece().addActionListener(e -> {
+            selectedPiece = RA8;
+        });
+        RH8 = new Rook(7*125, 0, "black", board, window);
+        board[0][7].add(RH8.getPiece());
+        RH8.getPiece().addActionListener(e -> {
+            selectedPiece = RH8;
+        });
+        RA1 = new Rook(0, 7*125, "white", board, window);
+        board[7][0].add(RA1.getPiece());
+        RA1.getPiece().addActionListener(e -> {
+            selectedPiece = RA1;
+        });
+        RH1 = new Rook(7*125, 7*125, "white", board, window);
+        board[7][7].add(RH1.getPiece());
+        RH1.setBackgroundColor("#F0D9B5");
+        RH1.getPiece().addActionListener(e -> {
+            selectedPiece = RH1;
+        });
+
+        //Setting up knights
+        NB8 = new Knight(125, 0, "black", board, window);
+        board[0][1].add(NB8.getPiece());
+        NB8.getPiece().addActionListener(e -> {
+            selectedPiece = NB8;
+        });
+
+        NG8 = new Knight(6*125, 0, "black", board, window);
+        board[0][6].add(NG8.getPiece());
+        NG8.setBackgroundColor("#F0D9B5");
+        NG8.getPiece().addActionListener(e -> {
+            selectedPiece = NG8;
+        });
+
+        NB1 = new Knight(125, 7*125, "white", board, window);
+        board[7][1].add(NB1.getPiece());
+        NB1.setBackgroundColor("#F0D9B5");
+        NB1.getPiece().addActionListener(e -> {
+            selectedPiece = NB1;
+        });
+
+        NG1 = new Knight(6*125, 7*125, "white", board, window);
+        board[7][6].add(NG1.getPiece());
+        NG1.getPiece().addActionListener(e -> {
+            selectedPiece = NG1;
         });
     }
-
+    public void repaintBoard()
+    {
+        //Loops the every row
+        for (int letters = 0; letters < board.length; letters++)
+        {
+            for (int numbers = 0; numbers < board[letters].length; numbers++)
+            {
+                //sets up board colors
+                if(numbers%2 == 0 && letters%2 == 0 || numbers%2 != 0 && letters%2 != 0)
+                    board[letters][numbers].setBackground(Color.decode("#F0D9B5"));
+                else board[letters][numbers].setBackground(Color.decode("#B58863"));
+            }
+        }
+    }
     private void movePiece(int newX, int newY, Color background)
     {
         if (selectedPiece != null)
         {
             selectedPiece.pieceMove(newX/125, newY/125, background, selectedPiece);
             selectedPiece = null;
+            repaintBoard();
         }
     }
 

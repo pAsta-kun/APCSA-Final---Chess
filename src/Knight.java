@@ -2,23 +2,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Pawn extends Piece
+public class Knight extends Piece
 {
-
     private String color;
     private JPanel[][] board;
     private ArrayList<JPanel> legalMoves = new ArrayList<>();
     private Container window;
     private int x;
     private int y;
-    public Pawn()
+
+    public Knight()
     {
         super();
     }
 
-    public Pawn(int x, int y, String color, JPanel[][] board, Container window)
+    public Knight(int x, int y, String color, JPanel[][] board, Container window)
     {
-        super(x, y, "bp", color, board, window);
+        super(x, y, "bn", color, board, window);
         this.x = x;
         this.y = y;
         this.color = color;
@@ -28,20 +28,19 @@ public class Pawn extends Piece
 
     public void calculateLegalMoves(int x, int y)
     {
-        System.out.println(y);
-        if (color.equals("white")) {
-            //checks if pawn on starting square
-            if (y == 6) {
-                legalMoves.add(board[y - 2][x-1]);
-                legalMoves.add(board[y-1][x-1]);
-            }
-            else legalMoves.add(board[y-1][x]);
-        }
-        else {
-            legalMoves.add(board[y + 1][x]);
-            //checks if pawn on starting square
-            if (y == 1) {
-                legalMoves.add(board[y + 2][x]);
+
+        // these are all the possible moves for a knight
+        int[][] moves = {
+                {1, -2}, {2, -1}, {2, 1}, {1, 2}, {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2}
+        };
+
+        for (int[] move : moves) {
+            int newX = x + move[0];
+            int newY = y + move[1];
+
+            // check if new position is within board boundaries
+            if (newX >= 0 && newX < board.length && newY >= 0 && newY < board[newX].length) {
+                legalMoves.add(board[newX][newY]);
             }
         }
 
@@ -56,25 +55,25 @@ public class Pawn extends Piece
     {
         for (int i = 0; i < legalMoves.size(); i++)
         {
+            System.out.println("x1: " + legalMoves.get(i).getX()/125);
+            System.out.println(newX);
+            System.out.println("y1: " + legalMoves.get(i).getY()/125);
+            System.out.println(newY);
 
             //checks to see if the newX and newY are valid moves
             if(legalMoves.get(i).getX()/125 == newX && legalMoves.get(i).getY()/125 == newY)
             {
-                if(x == 125)
-                {
-                    board[y/125][7].remove(getPiece());
-                }
-
                 board[newY][newX].add(getPiece());
-                getPiece().setBackground(background);
+                board[y/125][x/125].remove(getPiece());
                 window.repaint();
                 moving.setX(newX*125);
                 moving.setY(newY*125);
             }
 
+
         }
+
         //Clears legal move arraylist
         legalMoves.clear();
     }
-
 }

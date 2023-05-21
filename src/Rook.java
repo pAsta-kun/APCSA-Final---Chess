@@ -12,6 +12,10 @@ public class Rook extends Piece
     private Container window;
     private int x;
     private int y;
+    public Rook()
+    {
+        super();
+    }
     public Rook(int x, int y, String color, JPanel[][] board, Container window)
     {
         super(x, y, "br", color, board, window);
@@ -57,18 +61,15 @@ public class Rook extends Piece
                 board[newY][newX].add(getPiece());
                 board[y/125][x/125].remove(getPiece());
                 window.repaint();
+                moving.setX(newX*125);
+                moving.setY(newY*125);
             }
 
-            x = newX;
-            y = newY;
+
         }
+
 
         //Clears legal move arraylist
-        for (int i = 0; i < legalMoves.size(); i++)
-        {
-            legalMoves.remove(i);
-        }
-
-        System.out.println(getPiece());
+        legalMoves.clear();
     }
 }
